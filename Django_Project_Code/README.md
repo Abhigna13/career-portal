@@ -67,19 +67,19 @@ AI_Career_Recommendation_Portal
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-![Home Page](Project_Image/Home_Page.png)
+![Home Page](https://github.com/Abhigna13/career-portal/blob/main/Project_Image/Home_page.png)
 
 ### 💼 Jobs Page
-![Jobs Page](Project_Image/Jobs_Page.png)
+![Jobs Page](https://github.com/Abhigna13/career-portal/blob/main/Project_Image/Jobs_page.png)
 
 ### 🔐 Login Page
-![Login Page](Project_Image/Login_Page.png)
+![Login Page](https://github.com/Abhigna13/career-portal/blob/main/Project_Image/Login_page.png)
 
 ### 📝 Register Page
-![Register Page](Project_Image/Register_Page.png)
+![Register Page](https://github.com/Abhigna13/career-portal/blob/main/Project_Image/Register_page.png)
 
 ### 🚀 Skills Page
-![Skills Page](Project_Image/Skills_Page.png)
+![Skills Page](https://github.com/Abhigna13/career-portal/blob/main/Project_Image/Skills_page.png)
 
 ---
 
