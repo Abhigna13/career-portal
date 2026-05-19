@@ -1,0 +1,574 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Jobs Page - AI Career Portal</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --bg: #070b17;
+    --bg-surface: rgba(16, 24, 40, 0.92);
+    --surface: rgba(255, 255, 255, 0.06);
+    --surface-strong: rgba(255, 255, 255, 0.12);
+    --border: rgba(148, 163, 184, 0.2);
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --primary: #60a5fa;
+    --primary-strong: #3b82f6;
+    --accent: #8b5cf6;
+    --cyan: #06b6d4;
+    --shadow: 0 24px 80px rgba(15, 23, 42, 0.35);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    background: radial-gradient(circle at top left, rgba(96, 165, 250, 0.12), transparent 26%),
+                radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.14), transparent 28%),
+                var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 32px 20px;
+    overflow-x: hidden;
+}
+
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.45;
+}
+
+body::before {
+    width: 320px;
+    height: 320px;
+    top: -80px;
+    left: -80px;
+    background: rgba(96, 165, 250, 0.22);
+}
+
+body::after {
+    width: 260px;
+    height: 260px;
+    right: -60px;
+    bottom: -80px;
+    background: rgba(139, 92, 246, 0.2);
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+.container {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 40px 36px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+}
+
+h1 {
+    font-size: clamp(2.4rem, 5vw, 3rem);
+    line-height: 1.02;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 32px;
+    max-width: 640px;
+}
+
+.hero-box {
+    position: relative;
+    padding: 32px 28px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+
+.hero-box::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -20%;
+    width: 240px;
+    height: 240px;
+    background: rgba(96, 165, 250, 0.18);
+    border-radius: 50%;
+}
+
+.hero-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    left: -10%;
+    width: 190px;
+    height: 190px;
+    background: rgba(139, 92, 246, 0.12);
+    border-radius: 50%;
+}
+
+.hero-box > * {
+    position: relative;
+    z-index: 1;
+}
+
+.highlight {
+    display: inline-flex;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text);
+    margin: 12px 0 8px;
+}
+
+.small {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.search {
+    width: 100%;
+    min-height: 50px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    margin-bottom: 20px;
+}
+
+.search::placeholder {
+    color: rgba(148, 163, 184, 0.7);
+}
+
+.search:focus {
+    outline: none;
+    border-color: rgba(96, 165, 250, 0.5);
+    box-shadow: 0 0 0 5px rgba(96, 165, 250, 0.12);
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.filter {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.filter select {
+    width: 100%;
+    min-height: 50px;
+    padding: 0 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.filter select:focus {
+    outline: none;
+    border-color: rgba(96, 165, 250, 0.5);
+    box-shadow: 0 0 0 5px rgba(96, 165, 250, 0.12);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 32px;
+    margin-bottom: 18px;
+}
+
+.card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(96, 165, 250, 0.28);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.2);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(96, 165, 250, 0.08);
+    filter: blur(20px);
+    z-index: 0;
+}
+
+.card b {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(96, 165, 250, 0.14);
+    color: var(--primary);
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: 1px solid rgba(96, 165, 250, 0.22);
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.progress {
+    height: 8px;
+    background: rgba(148, 163, 184, 0.18);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 14px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: 999px;
+    transition: width 0.35s ease;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+    margin-top: 16px;
+    box-shadow: 0 12px 28px rgba(96, 165, 250, 0.24);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 36px rgba(96, 165, 250, 0.3);
+    opacity: 0.98;
+}
+
+.btn:active {
+    transform: translateY(0);
+    box-shadow: 0 10px 20px rgba(96, 165, 250, 0.22);
+}
+
+@media (max-width: 850px) {
+    body {
+        padding: 28px 16px;
+    }
+
+    .container {
+        padding: 32px 26px;
+    }
+
+    .filter {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 28px 22px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        margin-bottom: 28px;
+    }
+
+    .section-title {
+        margin-top: 28px;
+        margin-bottom: 14px;
+    }
+
+    .search,
+    .filter select {
+        min-height: 46px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+<h1>Find Your Dream Job 💼</h1>
+<p class="subtitle">AI-powered job recommendations based on your skills</p>
+
+<div class="hero-box">
+    🎯 Job Match Score: <span class="highlight" id="score">0%</span>
+    <div class="small">Your profile matches top industry roles</div>
+    <div class="small">💡 AI Insight: Apply consistently to improve match score</div>
+</div>
+
+<input type="text" class="search" placeholder="Search jobs...">
+
+<div class="filter">
+    <select id="locationFilter">
+        <option value="all">All Locations</option>
+        <option value="Remote">Remote</option>
+        <option value="Bangalore">Bangalore</option>
+        <option value="Hyderabad">Hyderabad</option>
+    </select>
+
+    <select id="typeFilter">
+        <option value="all">Job Type</option>
+        <option value="Internship">Internship</option>
+        <option value="Full-Time">Full-Time</option>
+    </select>
+
+    <select id="expFilter">
+        <option value="all">Experience</option>
+        <option value="0-1">0-1 Years</option>
+        <option value="1-3">1-3 Years</option>
+    </select>
+</div>
+
+<h3 class="section-title">⚡ Next Best Action</h3>
+<div class="card job-card" data-location="Remote" data-type="Full-Time" data-exp="1-3" data-score="92">
+    Apply to <b>Frontend Developer at Google</b> (92% Match)  
+    <br><button class="btn apply-btn">Apply Now</button>
+</div>
+
+<h3 class="section-title">🔥 AI Recommended Jobs</h3>
+
+<div class="card job-card" data-location="Remote" data-type="Full-Time" data-exp="1-3" data-score="92">
+    <div class="job-title">Frontend Developer</div>
+    <div class="small">Google • Remote • ₹10–15 LPA</div>
+    <div class="small">Match: 92%</div>
+    <button class="btn apply-btn">Apply Now</button>
+</div>
+
+<div class="card job-card" data-location="Bangalore" data-type="Full-Time" data-exp="1-3" data-score="89">
+    <div class="job-title">Full Stack Developer</div>
+    <div class="small">Amazon • Bangalore • ₹12–18 LPA</div>
+    <div class="small">Match: 89%</div>
+    <button class="btn apply-btn">Apply Now</button>
+</div>
+
+<h3 class="section-title">💼 Explore Jobs</h3>
+
+<div class="card job-card" data-location="Hyderabad" data-type="Full-Time" data-exp="0-1" data-score="85">
+    Backend Developer • Infosys • Hyderabad  
+    <button class="btn apply-btn">Apply</button>
+</div>
+
+<div class="card job-card" data-location="Remote" data-type="Full-Time" data-exp="0-1" data-score="87">
+    Software Engineer • TCS • Remote  
+    <button class="btn apply-btn">Apply</button>
+</div>
+
+<h3 class="section-title">⭐ Saved Jobs</h3>
+<div id="savedJobs"></div>
+
+<h3 class="section-title">📊 Application Tracker</h3>
+<div class="card">Google → Interview Scheduled</div>
+<div class="card">Amazon → Applied</div>
+<div class="card">Infosys → Rejected</div>
+
+<h3 class="section-title">🔔 Job Alerts</h3>
+<div class="card" id="alertBox">
+    Get notified for new jobs matching your profile  
+    <br><button class="btn" id="alertBtn">Enable Alerts</button>
+</div>
+
+</div>
+
+<script>
+
+// ---------- TOAST MESSAGE ----------
+function showMessage(msg){
+    let div = document.createElement("div");
+    div.innerText = msg;
+
+    div.style.position = "fixed";
+    div.style.bottom = "20px";
+    div.style.right = "20px";
+    div.style.background = "#333";
+    div.style.color = "white";
+    div.style.padding = "10px 15px";
+    div.style.borderRadius = "8px";
+    div.style.fontSize = "14px";
+    div.style.zIndex = "9999";
+
+    document.body.appendChild(div);
+
+    setTimeout(() => div.remove(), 2000);
+}
+
+// ---------- JOB ALERTS ----------
+const alertBtn = document.getElementById("alertBtn");
+const alertBox = document.getElementById("alertBox");
+
+let alertsEnabled = false;
+
+alertBtn.addEventListener("click", function () {
+
+    alertsEnabled = !alertsEnabled;
+
+    if (alertsEnabled) {
+        alertBtn.innerText = "Disable Alerts";
+        alertBtn.style.background = "#28a745";
+        alertBox.style.border = "2px solid #28a745";
+
+        showMessage("🔔 Job Alerts Enabled");
+    } else {
+        alertBtn.innerText = "Enable Alerts";
+        alertBtn.style.background = "#4cafef";
+        alertBox.style.border = "none";
+
+        showMessage("🔕 Job Alerts Disabled");
+    }
+});
+
+// ---------- ELEMENTS ----------
+const search = document.querySelector(".search");
+const cards = document.querySelectorAll(".job-card");
+
+// ---------- FILTER ----------
+function filterJobs(){
+
+    let text = search.value.toLowerCase();
+    let loc = document.getElementById("locationFilter").value;
+    let type = document.getElementById("typeFilter").value;
+    let exp = document.getElementById("expFilter").value;
+
+    cards.forEach(card=>{
+
+        let content = card.innerText.toLowerCase();
+
+        let matchText = content.includes(text);
+        let matchLoc = loc === "all" || card.dataset.location === loc;
+        let matchType = type === "all" || card.dataset.type === type;
+        let matchExp = exp === "all" || card.dataset.exp === exp;
+
+        card.style.display = (matchText && matchLoc && matchType && matchExp)
+            ? ""
+            : "none";
+    });
+
+    updateScore();
+}
+
+search.addEventListener("input", filterJobs);
+document.querySelectorAll(".filter select").forEach(f=>{
+    f.addEventListener("change", filterJobs);
+});
+
+// ---------- SAVE JOB ----------
+document.querySelectorAll(".apply-btn").forEach(btn=>{
+    btn.addEventListener("click", function(){
+
+        let title = this.closest(".card").innerText.split("\n")[0];
+
+        let saved = JSON.parse(localStorage.getItem("savedJobs")) || [];
+
+        if(!saved.includes(title)){
+            saved.push(title);
+            localStorage.setItem("savedJobs", JSON.stringify(saved));
+        }
+
+        loadSaved();
+        showMessage("💾 Job Saved!");
+    });
+});
+
+// ---------- LOAD SAVED ----------
+function loadSaved(){
+    let saved = JSON.parse(localStorage.getItem("savedJobs")) || [];
+    document.getElementById("savedJobs").innerHTML =
+        saved.map(j => `<div class="card">${j}</div>`).join("");
+}
+loadSaved();
+
+// ---------- SCORE ----------
+function updateScore(){
+
+    let visibleCards = [...document.querySelectorAll(".job-card")]
+        .filter(c => c.style.display !== "none");
+
+    let total = 0;
+    let count = 0;
+
+    visibleCards.forEach(c=>{
+        total += parseInt(c.dataset.score);
+        count++;
+    });
+
+    document.getElementById("score").innerText =
+        count ? Math.round(total/count) + "%" : "0%";
+}
+
+updateScore();
+
+</script>
+
+</body>
+</html> 

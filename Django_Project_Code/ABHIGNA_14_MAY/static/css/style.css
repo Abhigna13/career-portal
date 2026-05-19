@@ -1,0 +1,459 @@
+/* =========================
+   GLOBAL RESET
+========================= */
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+}
+
+/* =========================
+   BODY
+========================= */
+
+html,
+body{
+
+    width:100%;
+    height:100%;
+
+    overflow:hidden;
+
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+
+    position:relative;
+
+    background-image:
+
+    linear-gradient(
+        rgba(4,8,20,0.82),
+        rgba(4,8,20,0.82)
+    ),
+
+    url("https://images.unsplash.com/photo-1521737604893-d14cc237f11d?q=80&w=2070&auto=format&fit=crop");
+
+    background-position:center;
+
+    background-size:cover;
+
+    background-repeat:no-repeat;
+
+    background-attachment:fixed;
+}
+
+/* =========================
+   NAVBAR
+========================= */
+
+.navbar{
+
+    width:100%;
+
+    height:60px;
+
+    padding:0 42px;
+
+    position:fixed;
+
+    top:0;
+    left:0;
+
+    z-index:1000;
+
+    display:flex;
+
+    justify-content:space-between;
+
+    align-items:center;
+
+    background:rgba(5,10,25,0.30);
+
+    backdrop-filter:blur(14px);
+
+    -webkit-backdrop-filter:blur(14px);
+
+    border-bottom:1px solid rgba(255,255,255,0.05);
+}
+
+/* LOGO */
+
+.logo{
+
+    color:#67d8ff;
+
+    font-size:24px;
+
+    font-weight:700;
+
+    letter-spacing:0.3px;
+}
+
+/* NAV LINKS */
+
+.nav-links{
+
+    display:flex;
+
+    align-items:center;
+
+    gap:28px;
+}
+
+.nav-links a{
+
+    color:white;
+
+    text-decoration:none;
+
+    font-size:12px;
+
+    font-weight:500;
+
+    transition:0.3s ease;
+}
+
+.nav-links a:hover{
+
+    color:#67d8ff;
+}
+
+/* =========================
+   CENTER SECTION
+========================= */
+
+.center-box{
+
+    width:100%;
+
+    height:100vh;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    padding-top:60px;
+}
+
+/* =========================
+   GLASS CARD
+========================= */
+
+.card{
+
+    width:450px;
+
+    padding:20px 26px;
+
+    border-radius:20px;
+
+    background:rgba(255,255,255,0.08);
+
+    border:1px solid rgba(255,255,255,0.10);
+
+    backdrop-filter:blur(18px);
+
+    -webkit-backdrop-filter:blur(18px);
+
+    box-shadow:
+    0 15px 55px rgba(0,0,0,0.45);
+
+    text-align:center;
+}
+
+/* =========================
+   TITLE
+========================= */
+
+.card h1{
+
+    color:white;
+
+    font-size:24px;
+
+    line-height:1.35;
+
+    margin-bottom:10px;
+
+    font-weight:700;
+}
+
+/* =========================
+   PARAGRAPH
+========================= */
+
+.card p{
+
+    color:#dbe4ff;
+
+    font-size:13px;
+
+    line-height:1.6;
+
+    margin-bottom:16px;
+}
+
+/* =========================
+   FEATURES
+========================= */
+
+.features{
+
+    list-style:none;
+
+    text-align:left;
+
+    margin-bottom:18px;
+}
+
+.features li{
+
+    color:white;
+
+    font-size:13px;
+
+    margin-bottom:7px;
+
+    line-height:1.5;
+}
+
+/* =========================
+   BUTTON
+========================= */
+
+.btn{
+
+    width:100%;
+
+    border:none;
+
+    outline:none;
+
+    cursor:pointer;
+
+    padding:10px 22px;
+
+    border-radius:10px;
+
+    background:
+    linear-gradient(
+        135deg,
+        #4fc3ff,
+        #4b5cff
+    );
+
+    color:white;
+
+    font-size:13px;
+
+    font-weight:600;
+
+    transition:0.35s ease;
+
+    box-shadow:
+    0 8px 24px rgba(75,92,255,0.45);
+}
+
+.btn:hover{
+
+    transform:translateY(-2px);
+
+    box-shadow:
+    0 12px 28px rgba(75,92,255,0.70);
+}
+
+/* =========================
+   FORM
+========================= */
+
+form{
+    width:100%;
+}
+
+/* FORM GROUP */
+
+.form-group{
+
+    width:100%;
+
+    text-align:left;
+
+    margin-bottom:14px;
+}
+
+/* LABEL */
+
+.form-group label{
+
+    display:block;
+
+    color:white;
+
+    font-size:13px;
+
+    font-weight:500;
+
+    margin-bottom:7px;
+}
+
+/* INPUT */
+
+.form-control{
+
+    width:100%;
+
+    padding:11px 14px;
+
+    border-radius:10px;
+
+    border:1px solid rgba(255,255,255,0.12);
+
+    outline:none;
+
+    background:rgba(255,255,255,0.06);
+
+    color:white;
+
+    font-size:13px;
+
+    transition:0.3s ease;
+
+    backdrop-filter:blur(8px);
+}
+
+.form-control:focus{
+
+    border-color:#4fc3ff;
+
+    box-shadow:
+    0 0 0 3px rgba(79,195,255,0.15);
+}
+
+.form-control::placeholder{
+
+    color:#cbd5e1;
+}
+
+/* =========================
+   BOTTOM LINK
+========================= */
+
+.bottom-link{
+
+    margin-top:14px;
+
+    color:#cbd5e1;
+
+    font-size:13px;
+}
+
+.bottom-link a{
+
+    color:#38bdf8;
+
+    text-decoration:none;
+
+    font-weight:500;
+}
+
+.bottom-link a:hover{
+
+    text-decoration:underline;
+}
+
+/* =========================
+   DJANGO MESSAGES
+========================= */
+
+.messages-container{
+
+    position:fixed;
+
+    top:75px;
+
+    right:20px;
+
+    z-index:9999;
+}
+
+.message{
+
+    padding:12px 18px;
+
+    border-radius:10px;
+
+    margin-bottom:10px;
+
+    color:white;
+
+    background:rgba(0,0,0,0.45);
+
+    backdrop-filter:blur(10px);
+
+    font-size:13px;
+}
+
+/* =========================
+   MOBILE RESPONSIVE
+========================= */
+
+@media(max-width:768px){
+
+    html,
+    body{
+
+        overflow:auto;
+    }
+
+    .navbar{
+
+        padding:0 18px;
+    }
+
+    .logo{
+
+        font-size:20px;
+    }
+
+    .nav-links{
+
+        gap:14px;
+    }
+
+    .nav-links a{
+
+        font-size:11px;
+    }
+
+    .center-box{
+
+        min-height:100vh;
+
+        padding:
+        90px
+        16px
+        30px;
+    }
+
+    .card{
+
+        width:100%;
+
+        padding:20px 18px;
+    }
+
+    .card h1{
+
+        font-size:22px;
+    }
+
+    .btn{
+
+        width:100%;
+    }
+}

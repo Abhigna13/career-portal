@@ -1,0 +1,569 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills Page - AI Career Portal</title>
+
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap');
+
+:root {
+    --bg: #070b17;
+    --bg-surface: rgba(16, 24, 40, 0.92);
+    --surface: rgba(255, 255, 255, 0.06);
+    --surface-strong: rgba(255, 255, 255, 0.12);
+    --border: rgba(148, 163, 184, 0.2);
+    --text: #f8fafc;
+    --muted: #94a3b8;
+    --primary: #60a5fa;
+    --primary-strong: #3b82f6;
+    --accent: #8b5cf6;
+    --cyan: #06b6d4;
+    --shadow: 0 24px 80px rgba(15, 23, 42, 0.35);
+}
+
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+html, body {
+    min-height: 100%;
+}
+
+body {
+    background: radial-gradient(circle at top left, rgba(96, 165, 250, 0.12), transparent 26%),
+                radial-gradient(circle at bottom right, rgba(139, 92, 246, 0.14), transparent 28%),
+                var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    font-size: 16px;
+    line-height: 1.6;
+    padding: 32px 20px;
+    overflow-x: hidden;
+}
+
+body::before,
+body::after {
+    content: '';
+    position: fixed;
+    pointer-events: none;
+    border-radius: 50%;
+    filter: blur(90px);
+    opacity: 0.45;
+}
+
+body::before {
+    width: 320px;
+    height: 320px;
+    top: -80px;
+    left: -80px;
+    background: rgba(96, 165, 250, 0.22);
+}
+
+body::after {
+    width: 260px;
+    height: 260px;
+    right: -60px;
+    bottom: -80px;
+    background: rgba(139, 92, 246, 0.2);
+}
+
+button,
+input,
+select {
+    font: inherit;
+}
+
+.container {
+    max-width: 1040px;
+    margin: 0 auto;
+    padding: 40px 36px;
+    background: var(--bg-surface);
+    border: 1px solid var(--border);
+    border-radius: 28px;
+    box-shadow: var(--shadow);
+    backdrop-filter: blur(18px);
+}
+
+h1 {
+    font-size: clamp(2.4rem, 5vw, 3rem);
+    line-height: 1.02;
+    font-weight: 800;
+    letter-spacing: -0.03em;
+    margin-bottom: 8px;
+}
+
+.subtitle {
+    color: var(--muted);
+    font-size: 1rem;
+    margin-bottom: 32px;
+    max-width: 640px;
+}
+
+.hero-box {
+    position: relative;
+    padding: 32px 28px;
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.08);
+    border-radius: 24px;
+    overflow: hidden;
+    margin-bottom: 32px;
+}
+
+.hero-box::before {
+    content: '';
+    position: absolute;
+    top: -30%;
+    right: -20%;
+    width: 240px;
+    height: 240px;
+    background: rgba(96, 165, 250, 0.18);
+    border-radius: 50%;
+}
+
+.hero-box::after {
+    content: '';
+    position: absolute;
+    bottom: -20%;
+    left: -10%;
+    width: 190px;
+    height: 190px;
+    background: rgba(139, 92, 246, 0.12);
+    border-radius: 50%;
+}
+
+.hero-box > * {
+    position: relative;
+    z-index: 1;
+}
+
+.highlight {
+    display: inline-flex;
+    align-items: center;
+    font-size: 3rem;
+    font-weight: 800;
+    color: var(--text);
+    margin: 12px 0 8px;
+}
+
+.small {
+    color: var(--muted);
+    font-size: 0.95rem;
+    line-height: 1.7;
+}
+
+.search {
+    width: 100%;
+    min-height: 50px;
+    padding: 14px 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    background: rgba(255, 255, 255, 0.04);
+    color: var(--text);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease, transform 0.25s ease;
+    margin-bottom: 20px;
+}
+
+.search::placeholder {
+    color: rgba(148, 163, 184, 0.7);
+}
+
+.search:focus {
+    outline: none;
+    border-color: rgba(96, 165, 250, 0.5);
+    box-shadow: 0 0 0 5px rgba(96, 165, 250, 0.12);
+    transform: translateY(-1px);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.filter {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 16px;
+    margin-bottom: 32px;
+}
+
+.filter select {
+    width: 100%;
+    min-height: 50px;
+    padding: 0 16px;
+    border-radius: 14px;
+    border: 1px solid rgba(148, 163, 184, 0.15);
+    background: rgba(255, 255, 255, 0.05);
+    color: var(--text);
+    transition: border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.filter select:focus {
+    outline: none;
+    border-color: rgba(96, 165, 250, 0.5);
+    box-shadow: 0 0 0 5px rgba(96, 165, 250, 0.12);
+    background: rgba(255, 255, 255, 0.08);
+}
+
+.section-title {
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-top: 32px;
+    margin-bottom: 18px;
+}
+
+.card {
+    position: relative;
+    background: rgba(255, 255, 255, 0.06);
+    border: 1px solid rgba(148, 163, 184, 0.12);
+    border-radius: 18px;
+    padding: 20px;
+    margin-bottom: 16px;
+    box-shadow: 0 12px 32px rgba(15, 23, 42, 0.14);
+    transition: transform 0.25s ease, border-color 0.25s ease, box-shadow 0.25s ease;
+}
+
+.card:hover {
+    transform: translateY(-3px);
+    border-color: rgba(96, 165, 250, 0.28);
+    box-shadow: 0 18px 42px rgba(15, 23, 42, 0.2);
+}
+
+.card::before {
+    content: '';
+    position: absolute;
+    right: -20px;
+    top: -20px;
+    width: 80px;
+    height: 80px;
+    border-radius: 50%;
+    background: rgba(96, 165, 250, 0.08);
+    filter: blur(20px);
+    z-index: 0;
+}
+
+.card b {
+    display: block;
+    font-size: 1rem;
+    font-weight: 700;
+    color: var(--text);
+    margin-bottom: 10px;
+    position: relative;
+    z-index: 1;
+}
+
+.tag {
+    display: inline-flex;
+    align-items: center;
+    padding: 6px 12px;
+    border-radius: 999px;
+    background: rgba(96, 165, 250, 0.14);
+    color: var(--primary);
+    font-size: 0.82rem;
+    font-weight: 600;
+    border: 1px solid rgba(96, 165, 250, 0.22);
+    margin-top: 8px;
+    position: relative;
+    z-index: 1;
+}
+
+.progress {
+    height: 8px;
+    background: rgba(148, 163, 184, 0.18);
+    border-radius: 999px;
+    overflow: hidden;
+    margin-top: 14px;
+}
+
+.progress-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--primary) 0%, var(--accent) 100%);
+    border-radius: 999px;
+    transition: width 0.35s ease;
+}
+
+.btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 44px;
+    padding: 0 18px;
+    border-radius: 12px;
+    border: none;
+    background: linear-gradient(135deg, var(--primary), var(--primary-strong));
+    color: #ffffff;
+    font-weight: 700;
+    font-size: 0.95rem;
+    cursor: pointer;
+    transition: transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+    margin-top: 16px;
+    box-shadow: 0 12px 28px rgba(96, 165, 250, 0.24);
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 16px 36px rgba(96, 165, 250, 0.3);
+    opacity: 0.98;
+}
+
+.delete-btn{
+    display:inline-flex;
+    align-items:center;
+    justify-content:center;
+    min-height:44px;
+    padding:0 18px;
+    border-radius:12px;
+    border:none;
+    background:linear-gradient(135deg, var(--primary), var(--primary-strong));
+    color:#ffffff;
+    font-weight:700;
+    font-size:0.95rem;
+    cursor:pointer;
+    transition:transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
+    margin-top:16px;
+    box-shadow:0 12px 28px rgba(96, 165, 250, 0.24);
+}
+
+.delete-btn:hover{
+    transform:translateY(-1px);
+    box-shadow:0 16px 36px rgba(96, 165, 250, 0.3);
+    opacity:0.98;
+}
+
+@media (max-width: 850px) {
+    body {
+        padding: 28px 16px;
+    }
+
+    .container {
+        padding: 32px 26px;
+    }
+
+    .filter {
+        grid-template-columns: 1fr;
+    }
+}
+
+@media (max-width: 600px) {
+    .container {
+        padding: 28px 22px;
+    }
+
+    h1 {
+        font-size: 2rem;
+    }
+
+    .subtitle {
+        margin-bottom: 28px;
+    }
+
+    .section-title {
+        margin-top: 28px;
+        margin-bottom: 14px;
+    }
+
+    .search,
+    .filter select {
+        min-height: 46px;
+    }
+
+    .btn {
+        width: 100%;
+    }
+}
+</style>
+</head>
+
+<body>
+
+<div class="container">
+
+    <h1>Build Your Skills 🚀</h1>
+    <p class="subtitle">AI-powered career growth and job matching</p>
+
+    <div class="hero-box">
+        🎯 Profile Match Score:
+        <span class="highlight" id="score">0%</span>
+        <div class="small">AI analyzes your skills automatically</div>
+        <div class="small">💡 Improve weak skills to increase score</div>
+    </div>
+
+    <input type="text" class="search" id="search" placeholder="Search skills..." oninput="render()">
+
+    <div class="filter">
+        <select id="levelFilter" onchange="render()">
+            <option value="all">All Levels</option>
+            <option value="beginner">Beginner</option>
+            <option value="intermediate">Intermediate</option>
+            <option value="advanced">Advanced</option>
+        </select>
+
+        <select id="domainFilter" onchange="render()">
+            <option value="all">All Domains</option>
+            <option value="web">Web Development</option>
+            <option value="ai">AI / ML</option>
+            <option value="data">Data Science</option>
+        </select>
+    </div>
+
+    <h3 class="section-title">🔥 AI Recommendations</h3>
+
+    <div class="card">
+        Node.js <span class="tag">High Demand</span>
+        <div class="small">Perfect for React developers</div>
+    </div>
+
+    <div class="card">
+        Machine Learning <span class="tag">Trending</span>
+        <div class="small">Boosts your career growth</div>
+    </div>
+
+    <h3 class="section-title">💼 Your Skills</h3>
+    <div id="skillsList"></div>
+
+    <h3 class="section-title">➕ Add Skill</h3>
+    <input type="text" class="search" id="newSkill" placeholder="Enter new skill...">
+    <button class="btn" onclick="addCustomSkill()">Add Skill</button>
+
+    <h3 class="section-title">📊 Market Insights</h3>
+
+    <div class="card">React.js → 120 Jobs • High demand 🔥</div>
+    <div class="card">Python → 300 Jobs • Rapid growth 📈</div>
+    <div class="card">Node.js → 200 Jobs • Backend demand 🚀</div>
+
+    <h3 class="section-title">🎓 Learning Progress</h3>
+
+    <div class="card">
+        AI Course — 60% Complete  
+        <button class="btn" onclick="window.location.href='/jobs/'">Continue</button>
+    </div>
+
+    <div class="card">
+        Web Bootcamp — 80% Complete  
+        <button class="btn" onclick="window.location.href='/jobs/'">Continue</button>
+    </div>
+
+</div>
+
+<script>
+
+let skills = JSON.parse(localStorage.getItem("skills")) || [
+    {name:"React.js", level:70, domain:"web"},
+    {name:"Python", level:85, domain:"ai"}
+];
+
+skills = [...new Map(skills.map(s => [s.name.toLowerCase(), s])).values()];
+save();
+
+function save(){
+    localStorage.setItem("skills", JSON.stringify(skills));
+}
+
+function isDuplicate(name){
+    return skills.some(s => s.name.toLowerCase() === name.toLowerCase());
+}
+
+function deleteSkill(index){
+    skills.splice(index,1);
+    save();
+    render();
+}
+
+function render(){
+
+    let list = document.getElementById("skillsList");
+    let search = document.getElementById("search").value.toLowerCase().trim();
+    let level = document.getElementById("levelFilter").value;
+    let domain = document.getElementById("domainFilter").value;
+
+    list.innerHTML = "";
+
+    let total = 0;
+    let count = 0;
+
+    skills.forEach((s,index)=>{
+
+        let name = s.name.toLowerCase();
+
+        if(search && !name.includes(search)) return;
+
+        if(level==="beginner" && s.level>=60) return;
+        if(level==="intermediate" && (s.level<60 || s.level>80)) return;
+        if(level==="advanced" && s.level<=80) return;
+
+        if(domain!=="all" && s.domain!==domain) return;
+
+        total += s.level;
+        count++;
+
+        list.innerHTML += `
+        <div class="card">
+            <b>${s.name}</b>
+
+            <span class="tag">${s.level}% Match</span>
+
+            <div class="progress">
+                <div class="progress-bar" style="width:${s.level}%"></div>
+            </div>
+
+            <button class="delete-btn" onclick="deleteSkill(${index})">
+                Delete Skill
+            </button>
+        </div>`;
+    });
+
+    document.getElementById("score").innerText =
+        count ? Math.round(total / count) + "%" : "0%";
+}
+
+function addCustomSkill(){
+
+    let val = document.getElementById("newSkill").value.trim();
+
+    if(val === ""){
+        alert("Please enter a skill!");
+        return;
+    }
+
+    if(isDuplicate(val)){
+        alert("Skill already exists!");
+        return;
+    }
+
+    skills.push({
+        name: val,
+        level: Math.floor(Math.random() * 41) + 50,
+        domain: "web"
+    });
+
+    document.getElementById("newSkill").value = "";
+
+    save();
+    render();
+
+    alert(val + " skill added successfully!");
+}
+
+function addSkill(name){
+
+    if(isDuplicate(name)){
+        alert(name + " already exists!");
+        return;
+    }
+
+    skills.push({
+        name: name,
+        level: 60,
+        domain: "web"
+    });
+
+    save();
+    render();
+}
+
+render();
+
+</script>
+
+</body>
+</html>
