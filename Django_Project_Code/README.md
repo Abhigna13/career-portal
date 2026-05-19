@@ -68,19 +68,20 @@ AI_Career_Recommendation_Portal
 ## 📸 Screenshots
 
 ### 🏠 Home Page
-<img src="Project_Images/Home_page.png" width="100%">
+![Home page](Project_Image/Home_page.png)
 
 ### 💼 Jobs Page
-<img src="Project_Images/Jobs_page.png" width="100%">
+![Jobs page](Project_Image/Jobs_page.png)
 
 ### 🔐 Login Page
-<img src="Project_Images/Login_page.png" width="100%">
+![Login page](Project_Image/Login_page.png)
 
 ### 📝 Register Page
-<img src="Project_Images/Register_page.png" width="100%">
+![Register page](Project_Image/Register_page.png)
 
 ### 🚀 Skills Page
-<img src="Project_Images/Skills_page.png" width="100%">
+![Skills page](Project_Image/Skills_page.png)
+
 ---
 
 ## ⚙️ Installation & Setup
