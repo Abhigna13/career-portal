@@ -392,9 +392,11 @@ h1 {
 </div>
 
 <h3 class="section-title">⚡ Next Best Action</h3>
+
 <div class="card job-card" data-location="Remote" data-type="Full-Time" data-exp="1-3" data-score="92">
-    Apply to <b>Frontend Developer at Google</b> (92% Match)  
-    <br><button class="btn apply-btn">Apply Now</button>
+    <div class="job-title">Frontend Developer at Google</div>
+    <div class="small">92% Match • Remote • Google</div>
+    <button class="btn apply-btn" data-id="1">Apply Now</button>
 </div>
 
 <h3 class="section-title">🔥 AI Recommended Jobs</h3>
@@ -403,26 +405,27 @@ h1 {
     <div class="job-title">Frontend Developer</div>
     <div class="small">Google • Remote • ₹10–15 LPA</div>
     <div class="small">Match: 92%</div>
-    <button class="btn apply-btn">Apply Now</button>
+   <button class="btn apply-btn" data-id="2">Apply Now</button>
 </div>
 
 <div class="card job-card" data-location="Bangalore" data-type="Full-Time" data-exp="1-3" data-score="89">
     <div class="job-title">Full Stack Developer</div>
     <div class="small">Amazon • Bangalore • ₹12–18 LPA</div>
     <div class="small">Match: 89%</div>
-    <button class="btn apply-btn">Apply Now</button>
+     <button class="btn apply-btn" data-id="3">Apply Now</button>
+
 </div>
 
 <h3 class="section-title">💼 Explore Jobs</h3>
 
 <div class="card job-card" data-location="Hyderabad" data-type="Full-Time" data-exp="0-1" data-score="85">
     Backend Developer • Infosys • Hyderabad  
-    <button class="btn apply-btn">Apply</button>
+    <button class="btn apply-btn" data-id="4">Apply Now</button>
 </div>
 
 <div class="card job-card" data-location="Remote" data-type="Full-Time" data-exp="0-1" data-score="87">
     Software Engineer • TCS • Remote  
-    <button class="btn apply-btn">Apply</button>
+    <button class="btn apply-btn" data-id="5">Apply Now</button>
 </div>
 
 <h3 class="section-title">⭐ Saved Jobs</h3>
@@ -442,133 +445,167 @@ h1 {
 </div>
 
 <script>
+    let progress = { ai: 0, web: 0 };
 
-// ---------- TOAST MESSAGE ----------
-function showMessage(msg){
-    let div = document.createElement("div");
+try {
+    const stored = JSON.parse(localStorage.getItem("courseProgress"));
+    if (stored) progress = stored;
+} catch (e) {}
+function showMessage(msg) {
+    const div = document.createElement("div");
+
     div.innerText = msg;
 
-    div.style.position = "fixed";
-    div.style.bottom = "20px";
-    div.style.right = "20px";
-    div.style.background = "#333";
-    div.style.color = "white";
-    div.style.padding = "10px 15px";
-    div.style.borderRadius = "8px";
-    div.style.fontSize = "14px";
-    div.style.zIndex = "9999";
+    Object.assign(div.style, {
+        position: "fixed",
+        bottom: "20px",
+        right: "20px",
+        background: "#111827",
+        color: "#fff",
+        padding: "12px 16px",
+        borderRadius: "10px",
+        fontSize: "14px",
+        zIndex: "99999",
+        boxShadow: "0 10px 30px rgba(0,0,0,0.3)"
+    });
 
     document.body.appendChild(div);
-
     setTimeout(() => div.remove(), 2000);
 }
 
-// ---------- JOB ALERTS ----------
+function updateMatchScore() {
+    const ai = progress.ai || 0;
+    const web = progress.web || 0;
+
+    // weighted AI vs Web (real industry logic)
+    const score = Math.round((ai * 0.7) + (web * 0.3));
+
+    document.getElementById("score").innerText = score + "%";
+}
+
+const search = document.querySelector(".search");
+const locationFilter = document.getElementById("locationFilter");
+const typeFilter = document.getElementById("typeFilter");
+const expFilter = document.getElementById("expFilter");
+const scoreEl = document.getElementById("score");
+const savedJobsBox = document.getElementById("savedJobs");
+
 const alertBtn = document.getElementById("alertBtn");
 const alertBox = document.getElementById("alertBox");
 
 let alertsEnabled = false;
 
-alertBtn.addEventListener("click", function () {
-
+// ALERT TOGGLE
+alertBtn.addEventListener("click", () => {
     alertsEnabled = !alertsEnabled;
 
     if (alertsEnabled) {
         alertBtn.innerText = "Disable Alerts";
-        alertBtn.style.background = "#28a745";
-        alertBox.style.border = "2px solid #28a745";
-
-        showMessage("🔔 Job Alerts Enabled");
+        alertBtn.style.background = "#22c55e";
+        alertBox.style.border = "2px solid #22c55e";
+        showMessage("🔔 Alerts Enabled");
     } else {
         alertBtn.innerText = "Enable Alerts";
-        alertBtn.style.background = "#4cafef";
-        alertBox.style.border = "none";
-
-        showMessage("🔕 Job Alerts Disabled");
+        alertBtn.style.background = "";
+        alertBox.style.border = "";
+        showMessage("🔕 Alerts Disabled");
     }
 });
 
-// ---------- ELEMENTS ----------
-const search = document.querySelector(".search");
-const cards = document.querySelectorAll(".job-card");
-
-// ---------- FILTER ----------
-function filterJobs(){
-
-    let text = search.value.toLowerCase();
-    let loc = document.getElementById("locationFilter").value;
-    let type = document.getElementById("typeFilter").value;
-    let exp = document.getElementById("expFilter").value;
-
-    cards.forEach(card=>{
-
-        let content = card.innerText.toLowerCase();
-
-        let matchText = content.includes(text);
-        let matchLoc = loc === "all" || card.dataset.location === loc;
-        let matchType = type === "all" || card.dataset.type === type;
-        let matchExp = exp === "all" || card.dataset.exp === exp;
-
-        card.style.display = (matchText && matchLoc && matchType && matchExp)
-            ? ""
-            : "none";
-    });
-
-    updateScore();
+// GET ALL JOBS
+function getCards() {
+    return document.querySelectorAll(".job-card");
 }
 
-search.addEventListener("input", filterJobs);
-document.querySelectorAll(".filter select").forEach(f=>{
-    f.addEventListener("change", filterJobs);
-});
-
-// ---------- SAVE JOB ----------
-document.querySelectorAll(".apply-btn").forEach(btn=>{
-    btn.addEventListener("click", function(){
-
-        let title = this.closest(".card").innerText.split("\n")[0];
-
-        let saved = JSON.parse(localStorage.getItem("savedJobs")) || [];
-
-        if(!saved.includes(title)){
-            saved.push(title);
-            localStorage.setItem("savedJobs", JSON.stringify(saved));
-        }
-
-        loadSaved();
-        showMessage("💾 Job Saved!");
-    });
-});
-
-// ---------- LOAD SAVED ----------
-function loadSaved(){
-    let saved = JSON.parse(localStorage.getItem("savedJobs")) || [];
-    document.getElementById("savedJobs").innerHTML =
-        saved.map(j => `<div class="card">${j}</div>`).join("");
-}
-loadSaved();
-
-// ---------- SCORE ----------
-function updateScore(){
-
-    let visibleCards = [...document.querySelectorAll(".job-card")]
-        .filter(c => c.style.display !== "none");
+// FILTER SYSTEM
+function filterJobs() {
+    const text = search.value.toLowerCase().trim();
+    const loc = locationFilter.value;
+    const type = typeFilter.value;
+    const exp = expFilter.value;
 
     let total = 0;
     let count = 0;
 
-    visibleCards.forEach(c=>{
-        total += parseInt(c.dataset.score);
-        count++;
+    getCards().forEach(card => {
+        const content = card.innerText.toLowerCase();
+
+        const matchText = content.includes(text);
+        const matchLoc = loc === "all" || card.dataset.location === loc;
+        const matchType = type === "all" || card.dataset.type === type;
+        const matchExp = exp === "all" || card.dataset.exp === exp;
+
+        const show = matchText && matchLoc && matchType && matchExp;
+
+        card.style.display = show ? "" : "none";
+
+        if (show) {
+            total += Number(card.dataset.score || 0);
+            count++;
+        }
     });
 
-    document.getElementById("score").innerText =
-        count ? Math.round(total/count) + "%" : "0%";
+    scoreEl.innerText = count ? Math.round(total / count) + "%" : "0%";
 }
 
-updateScore();
+// EVENTS
+search.addEventListener("input", filterJobs);
+[locationFilter, typeFilter, expFilter].forEach(el =>
+    el.addEventListener("change", filterJobs)
+);
 
+// SAVED JOBS
+function getSavedJobs() {
+    return JSON.parse(localStorage.getItem("savedJobs")) || [];
+}
+
+function saveJob(title) {
+    let saved = getSavedJobs();
+
+    if (!saved.includes(title)) {
+        saved.push(title);
+        localStorage.setItem("savedJobs", JSON.stringify(saved));
+        showMessage("💾 Job Saved!");
+    } else {
+        showMessage("⚠️ Already Saved!");
+    }
+
+    renderSavedJobs();
+}
+
+function renderSavedJobs() {
+    const saved = getSavedJobs();
+
+    savedJobsBox.innerHTML = saved.length
+        ? saved.map(j => `<div class="card">⭐ ${j}</div>`).join("")
+        : `<div class="card">No saved jobs yet</div>`;
+}
+
+renderSavedJobs();
+
+// APPLY BUTTON (EVENT DELEGATION - IMPORTANT)
+document.addEventListener("click", (e) => {
+    const btn = e.target.closest(".apply-btn");
+    if (!btn) return;
+
+    const card = btn.closest(".job-card") || btn.closest(".card");
+    if (!card) return;
+
+    const title =
+    card.querySelector(".job-title")?.innerText || "Job";
+
+    saveJob(title);
+
+    btn.innerText = "Applied ✔";
+    btn.style.background = "#16a34a";
+    btn.disabled = true;
+});
+
+window.addEventListener("storage", updateMatchScore);
+
+// INIT
+filterJobs();
+updateMatchScore();
 </script>
-
 </body>
-</html> 
+</html>

@@ -306,28 +306,38 @@ h1 {
     opacity: 0.98;
 }
 
-.delete-btn{
-    display:inline-flex;
-    align-items:center;
-    justify-content:center;
-    min-height:44px;
-    padding:0 18px;
-    border-radius:12px;
-    border:none;
-    background:linear-gradient(135deg, var(--primary), var(--primary-strong));
-    color:#ffffff;
-    font-weight:700;
-    font-size:0.95rem;
-    cursor:pointer;
-    transition:transform 0.25s ease, box-shadow 0.25s ease, opacity 0.25s ease;
-    margin-top:16px;
-    box-shadow:0 12px 28px rgba(96, 165, 250, 0.24);
+.delete-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 40px;
+    padding: 0 14px;
+    margin-top: 14px;
+
+    border-radius: 10px;
+    border: 1px solid rgba(239, 68, 68, 0.35);
+
+    background: rgba(239, 68, 68, 0.12);
+    color: #fca5a5;
+
+    font-weight: 600;
+    font-size: 0.85rem;
+
+    cursor: pointer;
+
+    transition: all 0.25s ease;
+    backdrop-filter: blur(10px);
 }
 
-.delete-btn:hover{
-    transform:translateY(-1px);
-    box-shadow:0 16px 36px rgba(96, 165, 250, 0.3);
-    opacity:0.98;
+.delete-btn:hover {
+    background: rgba(239, 68, 68, 0.25);
+    color: #ffffff;
+    transform: translateY(-2px);
+    box-shadow: 0 10px 25px rgba(239, 68, 68, 0.25);
+}
+
+.delete-btn:active {
+    transform: scale(0.97);
 }
 
 @media (max-width: 850px) {
@@ -433,137 +443,298 @@ h1 {
 
     <h3 class="section-title">🎓 Learning Progress</h3>
 
-    <div class="card">
-        AI Course — 60% Complete  
-        <button class="btn" onclick="window.location.href='/jobs/'">Continue</button>
+<div class="card">
+    <span id="aiProgressText">
+        AI Course — 0% Complete
+    </span>
+
+    <div class="progress">
+        <div class="progress-bar" id="aiProgressBar"></div>
     </div>
 
-    <div class="card">
-        Web Bootcamp — 80% Complete  
-        <button class="btn" onclick="window.location.href='/jobs/'">Continue</button>
-    </div>
-
+    <button class="btn" onclick="continueAI()">Continue AI</button>
 </div>
 
+<div class="card">
+    <span id="webProgressText">
+        Web Bootcamp — 0% Complete
+    </span>
+
+    <div class="progress">
+        <div class="progress-bar" id="webProgressBar"></div>
+    </div>
+
+   <button class="btn" onclick="continueWeb()">Continue Web</button>
+</div>
+
+</div>
 <script>
+/* =========================
+   STORAGE KEYS
+========================= */
+const SKILL_KEY = "skills";
+const PROGRESS_KEY = "courseProgress";
 
-let skills = JSON.parse(localStorage.getItem("skills")) || [
-    {name:"React.js", level:70, domain:"web"},
-    {name:"Python", level:85, domain:"ai"}
-];
-
-skills = [...new Map(skills.map(s => [s.name.toLowerCase(), s])).values()];
-save();
-
-function save(){
-    localStorage.setItem("skills", JSON.stringify(skills));
+/* =========================
+   SAFE PARSER
+========================= */
+function safeParse(key) {
+    try {
+        const data = localStorage.getItem(key);
+        return data ? JSON.parse(data) : null;
+    } catch {
+        return null;
+    }
 }
 
-function isDuplicate(name){
-    return skills.some(s => s.name.toLowerCase() === name.toLowerCase());
+/* =========================
+   INIT STATE
+========================= */
+let skills = safeParse(SKILL_KEY);
+
+if (!Array.isArray(skills)) {
+    skills = [];
 }
 
-function deleteSkill(index){
-    skills.splice(index,1);
-    save();
+let courseProgress = safeParse(PROGRESS_KEY);
+
+if (!courseProgress || typeof courseProgress !== "object") {
+    courseProgress = { ai: 0, web: 0 };
+}
+
+courseProgress.ai = courseProgress.ai ?? 0;
+courseProgress.web = courseProgress.web ?? 0;
+
+/* =========================
+   SAVE
+========================= */
+function saveSkills() {
+    localStorage.setItem(SKILL_KEY, JSON.stringify(skills));
+}
+
+function saveProgress() {
+    localStorage.setItem(PROGRESS_KEY, JSON.stringify(courseProgress));
+}
+
+/* =========================
+   HELPERS
+========================= */
+function normalizeName(name) {
+    return name.trim().toLowerCase();
+}
+
+function isDuplicate(name) {
+    const n = normalizeName(name);
+    return skills.some(s => normalizeName(s.name) === n);
+}
+
+function generateId() {
+    return Date.now() + Math.floor(Math.random() * 10000);
+}
+
+/* =========================
+   DELETE SKILL (SAFE)
+========================= */
+function deleteSkill(id) {
+    skills = skills.filter(s => s.id !== id);
+    saveSkills();
+    updateLearningProgressFromSkills();  // ADD THIS
+
     render();
 }
 
-function render(){
+/* =========================
+   SCORE
+========================= */
+function calculateScore(list) {
+    if (!list.length) return 0;
+    return Math.round(list.reduce((a, b) => a + b.level, 0) / list.length);
+}
 
-    let list = document.getElementById("skillsList");
-    let search = document.getElementById("search").value.toLowerCase().trim();
-    let level = document.getElementById("levelFilter").value;
-    let domain = document.getElementById("domainFilter").value;
+/* =========================
+   PROGRESS UI (FIXED HERO BUG)
+========================= */
+function updateProgress() {
+    saveProgress();
+
+    const aiText = document.getElementById("aiProgressText");
+    const webText = document.getElementById("webProgressText");
+
+    if (aiText && webText) {
+        aiText.innerText = `AI Course — ${courseProgress.ai}% Complete`;
+        webText.innerText = `Web Bootcamp — ${courseProgress.web}% Complete`;
+    }
+
+    document.getElementById("aiProgressBar").style.width = courseProgress.ai + "%";
+    document.getElementById("webProgressBar").style.width = courseProgress.web + "%";
+}
+
+/* =========================
+   CONTINUE
+========================= */
+function continueAI() {
+    courseProgress.ai = Math.min(100, courseProgress.ai + 5);
+    saveProgress();
+    updateProgress();
+
+    setTimeout(() => {
+        window.location.href = "/jobs/";
+    }, 200);
+}
+
+function continueWeb() {
+    courseProgress.web = Math.min(100, courseProgress.web + 5);
+    saveProgress();
+    updateProgress();
+
+    setTimeout(() => {
+        window.location.href = "/jobs/";
+    }, 200);
+}
+
+/* =========================
+   RENDER
+========================= */
+function render() {
+    const list = document.getElementById("skillsList");
+
+    const search = document.getElementById("search").value.toLowerCase();
+    const level = document.getElementById("levelFilter").value;
+    const domain = document.getElementById("domainFilter").value;
+
+    const filtered = skills.filter(s => {
+        if (search && !s.name.toLowerCase().includes(search)) return false;
+
+        if (level === "beginner" && s.level > 60) return false;
+        if (level === "intermediate" && (s.level < 60 || s.level > 80)) return false;
+        if (level === "advanced" && s.level < 80) return false;
+
+        if (domain !== "all" && s.domain !== domain) return false;
+
+        return true;
+    });
 
     list.innerHTML = "";
 
-    let total = 0;
-    let count = 0;
-
-    skills.forEach((s,index)=>{
-
-        let name = s.name.toLowerCase();
-
-        if(search && !name.includes(search)) return;
-
-        if(level==="beginner" && s.level>=60) return;
-        if(level==="intermediate" && (s.level<60 || s.level>80)) return;
-        if(level==="advanced" && s.level<=80) return;
-
-        if(domain!=="all" && s.domain!==domain) return;
-
-        total += s.level;
-        count++;
-
-        list.innerHTML += `
-        <div class="card">
-            <b>${s.name}</b>
-
-            <span class="tag">${s.level}% Match</span>
-
-            <div class="progress">
-                <div class="progress-bar" style="width:${s.level}%"></div>
-            </div>
-
-            <button class="delete-btn" onclick="deleteSkill(${index})">
-                Delete Skill
-            </button>
-        </div>`;
-    });
-
-    document.getElementById("score").innerText =
-        count ? Math.round(total / count) + "%" : "0%";
-}
-
-function addCustomSkill(){
-
-    let val = document.getElementById("newSkill").value.trim();
-
-    if(val === ""){
-        alert("Please enter a skill!");
+    if (filtered.length === 0) {
+        list.innerHTML = "<p class='small'>No skills found. Add your first skill 🚀</p>";
+        document.getElementById("score").innerText = "0%";
         return;
     }
 
-    if(isDuplicate(val)){
+    filtered.forEach(skill => {
+        const card = document.createElement("div");
+        card.className = "card";
+
+        const progress = Math.max(0, Math.min(100, skill.level));
+
+        card.innerHTML = `
+            <b>${skill.name}</b>
+            <span class="tag">${skill.domain.toUpperCase()} • ${progress}%</span>
+            <div class="progress">
+                <div class="progress-bar" style="width:${progress}%"></div>
+            </div>
+        `;
+
+        const btn = document.createElement("button");
+        btn.className = "delete-btn";
+        btn.innerText = "Delete Skill";
+        btn.onclick = () => deleteSkill(skill.id);
+
+        card.appendChild(btn);
+        list.appendChild(card);
+    });
+
+    // score from FULL dataset (correct UX)
+    const scoreEl = document.getElementById("score");
+    if (scoreEl) {
+        scoreEl.innerText = calculateScore(skills) + "%";
+    }
+}
+
+/* =========================
+   ADD SKILL
+========================= */
+function addCustomSkill() {
+
+    const input = document.getElementById("newSkill");
+    const val = input.value.trim();
+
+    if (!val) {
+        alert("Enter skill!");
+        return;
+    }
+
+    if (isDuplicate(val)) {
         alert("Skill already exists!");
         return;
     }
 
     skills.push({
+        id: generateId(),
         name: val,
-        level: Math.floor(Math.random() * 41) + 50,
-        domain: "web"
+        level: 50,
+        domain: detectDomain(val)
     });
 
-    document.getElementById("newSkill").value = "";
-
-    save();
-    render();
-
-    alert(val + " skill added successfully!");
-}
-
-function addSkill(name){
-
-    if(isDuplicate(name)){
-        alert(name + " already exists!");
-        return;
-    }
-
-    skills.push({
-        name: name,
-        level: 60,
-        domain: "web"
-    });
-
-    save();
+    saveSkills();
+    updateLearningProgressFromSkills();  // ADD THIS
+    input.value = "";
     render();
 }
 
-render();
+/* =========================
+   DOMAIN DETECTION
+========================= */
+function detectDomain(val) {
+    val = val.toLowerCase();
 
+    const aiSkills = ["python", "ai", "ml", "machine learning", "data", "deep learning", "tensorflow"];
+    const webSkills = ["react", "node", "html", "css", "javascript", "js", "next"];
+
+    if (aiSkills.some(s => val.includes(s))) return "ai";
+    if (webSkills.some(s => val.includes(s))) return "web";
+
+    return "web"; 
+}
+
+function updateLearningProgressFromSkills() {
+    let aiTotal = 0, webTotal = 0;
+    let aiCount = 0, webCount = 0;
+
+    skills.forEach(s => {
+        if (s.domain === "ai") {
+    aiTotal += s.level;
+    aiCount++;
+} else if (s.domain === "web") {
+    webTotal += s.level;
+    webCount++;
+}
+    });
+
+    const aiAvg = aiCount ? aiTotal / aiCount : 0;
+    const webAvg = webCount ? webTotal / webCount : 0;
+
+    // smooth + capped progress
+    courseProgress.ai = Math.min(100, Math.round(aiAvg));
+    courseProgress.web = Math.min(100, Math.round(webAvg));
+
+    saveProgress();
+    updateProgress();
+}
+
+/* =========================
+   INIT
+========================= */
+document.addEventListener("DOMContentLoaded", () => {
+    render();
+    updateLearningProgressFromSkills();
+    updateProgress();
+});
+
+function goToJobs() {
+    window.location.href = "/jobs/";
+}
 </script>
-
 </body>
 </html>
